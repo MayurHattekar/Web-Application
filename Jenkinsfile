@@ -4,6 +4,13 @@ pipeline {
         DOCKER_IMAGE = "mayurh1993/web-application"
     }
     stages {
+        stage('Build Docker Image') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'jenkins-user-for-docker-login', passwordVariable: 'PASSWD', usernameVariable: 'USER')]) {
+                    sh 'docker build --build-arg USER=${USER} --build-arg PASSWD=${PASSWD} -t web-application .'
+                }
+            }
+        }
         stage('Build') {
             steps {
                 script {
